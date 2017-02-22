@@ -9,6 +9,3 @@ To install:
 ```r
 devtools::install_github("yanyachen/IsolationForest")
 ```
-
-
-
