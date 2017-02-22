@@ -1,0 +1,6 @@
+useDynLib(IsolationForest)
+
+export(IsolationTrees,AnomalyScore)
+
+import(methods)
+
