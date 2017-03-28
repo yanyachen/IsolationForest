@@ -18,6 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##########################################################################
 
+#' @export
 AnomalyScore<-function(x, forest, ntree = forest$ntree, hlim = forest$hlim, appRange=F)
 {
  if (!inherits(forest,"iForest"))
@@ -33,7 +34,6 @@ AnomalyScore<-function(x, forest, ntree = forest$ntree, hlim = forest$hlim, appR
 
           nrowx<-nrow(x)
           ncolx<-forest$trees$xcol
-          
           xn<-x[,!forest$colisfactor]
           xn<-data.matrix(xn)
           storage.mode(xn) <- "double"
