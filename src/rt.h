@@ -28,6 +28,7 @@
 /* swap two integers */
 #define swapInt(a, b) ((a ^= b), (b ^= a), (a ^= b))
 
+int omp_get_max_threads();
 
 void rTrees(double *x, int *xrow, int *xcol, int *nrnodes, int *ntree, int *hlim, int *rowSamp, int *nRowSamp, int *colSamp, int *nColSamp, int *nmin, double *rFactor, double *colWeight, int *nodeStatus, int *lDaughter, int *rDaughter, int  *splitAtt, double *splitPoint, double *ulim, double *llim, int *nSam, int *ntreeSize);
 

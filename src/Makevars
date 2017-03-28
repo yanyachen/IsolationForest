@@ -1,0 +1,6 @@
+PKG_CFLAGS = $(SHLIB_OPENMP_CFLAGS)
+PKG_LIBS = $(SHLIB_OPENMP_CFLAGS)
+C_OBJS =  rTrees.o rtDepth.o rtMisc.o
+OBJECTS = $(C_OBJS)
+all: $(SHLIB)
+$(SHLIB): $(OBJECTS)

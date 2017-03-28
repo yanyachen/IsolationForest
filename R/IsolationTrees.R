@@ -18,6 +18,9 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##########################################################################
 
+#' @import methods
+#' @useDynLib IsolationForest
+#' @export
 IsolationTrees<-function(x, ntree=10, hlim=as.integer(ceiling(log2(nrow(x)))), rowSamp=F, nRowSamp=nrow(x), nmin = 1, rFactor =1, colSamp = F, nColSamp = ncol(x), colWeight = c(rep(1,ncol(x))))
 # x is a data frame on which the random trees are built.
 # ntree is the number of trees to build.

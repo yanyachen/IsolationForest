@@ -18,7 +18,11 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##########################################################################*/
 #include <R.h>
+# ifdef _OPENMP
+#include <omp.h>
+# endif
 #include "rt.h"
+
 
 void rTrees(double *x, int *xrow, int *xcol, int *nrnodes, int *ntree, int *hlim, int *rowSamp, int *nRowSamp, int *colSamp, int *nColSamp, int *nmin, double *rFactor, double *colWeight, int *nodeStatus, int *lDaughter, int *rDaughter, int  *splitAtt, double *splitPoint, double *ulim, double *llim, int *nSam, int *ntreeSize)
 {
@@ -51,6 +55,7 @@ void rTrees(double *x, int *xrow, int *xcol, int *nrnodes, int *ntree, int *hlim
   int *AttPool = (int *) Calloc(*xcol, int);
   unsigned long int *xref = (unsigned long int *) Calloc(*xrow, unsigned long int);
   bool *AttSkip = (bool *)Calloc(*xcol, bool);
+  int nthread;
   /* xref is the reference to x, xref helps to save time on swapping cases*/
   for (i=0; i< *xrow; i++) xref[i] = (unsigned long int)i;
 
@@ -68,6 +73,10 @@ void rTrees(double *x, int *xrow, int *xcol, int *nrnodes, int *ntree, int *hlim
     *nColSamp = *xcol;
   }
 
+  # ifdef _OPENMP
+  nthread = omp_get_max_threads();
+  #pragma omp parallel for num_threads(nthread)
+  # endif
   for ( i=0 ;i < *ntree; ++i)  {
       idx = i * *nrnodes;  //tree offset
       /* Random sampling */
@@ -347,7 +356,6 @@ void randomSplit(double *x, unsigned long int *xref, int xrow, int xcol, int ndS
      // Rprintf("n2 = %d, splitpoint: %f, x[n]: %f, x[n+1]: %f\n",n, *splitPoint,x[n+sAtt * xrow], x[n+1+sAtt * xrow] );
      *splitAtt = sAtt + 1;  /* + 1 for indexing in R */
    }
-   
    if (*splitAtt > -1)
    {
        *ulim = attMax[*splitAtt -1] + attSplitPoint[*splitAtt -1] - attMin[*splitAtt -1];

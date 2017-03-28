@@ -19,12 +19,16 @@
 ##########################################################################*/
 
 #include <R.h>
+# ifdef _OPENMP
+#include <omp.h>
+# endif
 #include "rt.h"
 
 void rtDepth(double *x, int *xrow, int *xcol, int *samSize, int *nrnodes, int *ntree, int *hlim, int *nodeStatus, int *lDaughter, int *rDaughter, int  *splitAtt, double *splitPoint, double *ulim, double *llim, int *nSam, int *appRange, double *outF, double *pathLength, int *isoby, double *isoat)
 {
   int i,j,idx ;
   double *totDepth, scaleF;
+  int nthread;
   totDepth = (double *) Calloc(*xrow, double);
   zeroInt(isoby, *xrow * *xcol);
   zeroDouble(totDepth, *xrow);
@@ -33,6 +37,10 @@ void rtDepth(double *x, int *xrow, int *xcol, int *samSize, int *nrnodes, int *n
   zeroDouble(isoat, *xrow * *xcol);
 
     // travel the ntree number of trees
+    # ifdef _OPENMP
+    nthread = omp_get_max_threads();
+    #pragma omp parallel for num_threads(nthread)
+    # endif
     for (j = 0; j < *ntree; ++j)  {
       idx = j * *nrnodes;
 
@@ -57,7 +65,7 @@ void trvTree(double *x, int xrow, int xcol, int hlim,
              int *rDaughter, int  *splitAtt, double *splitPoint,
              double *ulim, double *llim, int *nSam, int appRange, double *totDepth, int *isoby, double *isoat)
 {
-  int i, k, d,p,j, sAtt=0;
+  int i, k, d,p, sAtt=0;
   double sVal, lastSplitPoint;
   bool inRange;
 
@@ -85,7 +93,6 @@ void trvTree(double *x, int xrow, int xcol, int hlim,
              }
        }
        else
-       
          p++;
          //isoat[sAtt * xrow + i] += splitPoint[k];
 
